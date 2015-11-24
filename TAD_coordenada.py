@@ -25,14 +25,14 @@ def e_coordenada(coordenada):
 		return False									# caso nao seja tuplo, retorna False
 
 def coordenadas_iguais(coordenada1, coordenada2):
-	if coordenada1[0] == coordenada2[0] and coordenada1[1] == coordenada2[1]:	#comparar a posicao 1 das duas coordenadas, e fazer o mesmo para a segunda coordenada
+	if coordenada1[0] == coordenada2[0] and coordenada1[1] == coordenada2[1]:		# comparar a posicao 1 das duas coordenadas, e fazer o mesmo para a segunda coordenada
 		return True
-	else:																		# caso sejam diferentes, retorna False
+	else:											# caso sejam diferentes, retorna False
 		return False
 
 def coordenada_para_cadeia(coordenada):
-	linha = str(coordenada_linha(coordenada))									# transforma a coordenada da linha numa string
-	coluna = str(coordenada_coluna(coordenada))									# transforma a coordenada da coluna numa string
-	cadeia = '(' + linha + " : " + coluna + ')'									# junta os varios elementos da string
+	linha = str(coordenada_linha(coordenada))				# transforma a coordenada da linha numa string
+	coluna = str(coordenada_coluna(coordenada))				# transforma a coordenada da coluna numa string
+	cadeia = '(' + linha + " : " + coluna + ')'				# junta os varios elementos da string
 	
 	return cadeia
