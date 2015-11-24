@@ -25,15 +25,15 @@ def coordenada_coluna(coordenada):
 
 	
 def e_coordenada(coordenada):
-	if isinstance(coordenada, (tuple)):													# verificar se o que e dado e um tuplo
+	if isinstance(coordenada, (tuple)):							# verificar se o que e dado e um tuplo
 		if not(isinstance(coordenada[0],(int)) and isinstance(coordenada[1],(int))):	# verificar que os elementos do tuplo sao inteiros
 			return False
 		if coordenada[0] <= 0 or coordenada[1] <= 0:					# verificar que os elementos do tuplo sao positivos
 			return False
-		else:																			# caso contrario, e coordenada
+		else:										# caso contrario, e coordenada
 			return True
 	else:
-		return False																	# caso nao seja tuplo, retorna False
+		return False									# caso nao seja tuplo, retorna False
 
 
 def coordenadas_iguais(coordenada1, coordenada2):
