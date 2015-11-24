@@ -37,7 +37,7 @@ def e_coordenada(coordenada):
 
 
 def coordenadas_iguais(coordenada1, coordenada2):
-	if coordenada1[0] == coordenada2[0] and coordenada1[1] == coordenada2[1]:	#comparar a posicao 1 das duas coordenadas, e fazer o mesmo para a segunda coordenada
+	if coordenada1[0] == coordenada2[0] and coordenada1[1] == coordenada2[1]:	#comparar posicao 1 das coordenadas, e fazer o mesmo para a posicao 2		
 		return True
 	else:										# caso sejam diferentes, retorna False
 		return False
