@@ -49,3 +49,5 @@ def coordenada_para_cadeia(coordenada):
 	cadeia = '(' + linha + " : " + coluna + ')'									# junta os varios elementos da string
 	
 	return cadeia
+	
+##########################################################################################################################
