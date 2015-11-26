@@ -21,14 +21,15 @@ def coordenada_linha(coordenada):						# o primeiro valor do tuplo da a coordena
 	
 	
 def coordenada_coluna(coordenada):
-	return coordenada[1]							# o segundo valor do tuplo da a coordenada da coluna 
+	return coordenada[1]					# o segundo valor do tuplo da a coordenada da coluna 
 
 	
 def e_coordenada(coordenada):
 	if isinstance(coordenada, (tuple)):							# verificar se o que e dado e um tuplo
-		if not(isinstance(coordenada[0],(int)) and isinstance(coordenada[1],(int))):	# verificar que os elementos do tuplo sao inteiros
+		if not(isinstance(coordenada_linha(coordenada),(int)) and \
+		isinstance(coordenada_coluna(coordenada),(int))):	# verificar que os elementos do tuplo sao inteiros
 			return False
-		if coordenada[0] <= 0 or coordenada[1] <= 0:					# verificar que os elementos do tuplo sao positivos
+		if coordenada_linha(coordenada) <= 0 or coordenada_coluna(coordenada) <= 0:	# verificar que os elementos do tuplo sao positivos
 			return False
 		else:										# caso contrario, e coordenada
 			return True
@@ -37,9 +38,10 @@ def e_coordenada(coordenada):
 
 
 def coordenadas_iguais(coordenada1, coordenada2):
-	if coordenada1[0] == coordenada2[0] and coordenada1[1] == coordenada2[1]:	#comparar posicao 1 das coordenadas, e fazer o mesmo para a posicao 2		
+	if coordenada_linha(coordenada1) == coordenada_linha(coordenada2) and \
+	coordenada_coluna(coordenada1) == coordenada_coluna(cordenada2):	#comparar posicao 1 das coordenadas, e fazer o mesmo para a posicao 2		
 		return True
-	else:										# caso sejam diferentes, retorna False
+	else:									# caso sejam diferentes, retorna False
 		return False
 
 
