@@ -49,7 +49,6 @@ def coordenada_para_cadeia(coordenada):
 	linha = str(coordenada_linha(coordenada))			# transforma a coordenada da linha numa string
 	coluna = str(coordenada_coluna(coordenada))			# transforma a coordenada da coluna numa string
 	cadeia = '(' + linha + " : " + coluna + ')'			# junta os varios elementos da string
-	
 	return cadeia
 	
 #################################################################################################################################
