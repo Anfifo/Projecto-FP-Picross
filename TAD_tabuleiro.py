@@ -55,3 +55,4 @@ def tabuleiros_iguais(t1, t2):
 
 def escreve_tabuleiro(t):
 	
+#pepe sucks 
