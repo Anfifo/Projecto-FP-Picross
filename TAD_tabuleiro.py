@@ -19,8 +19,7 @@ def cria_tabuleiro(tuplo):
     #numero de linhas = numero de colunas 
     tabuleiro_pt1=[]
     for nr_de_linhas in range (len(tuplo[0])):
-        tabuleiro_pt1.append(tuple([0 for nr_colunas in range(len(tuplo[1]))])+(tuplo[1][nr_de_linhas],))
-    #juntar a base do tabueliro as especificacoes (possivelmente fazer uma funcao?)
+        tabuleiro_pt1.append(tuple([0 for nr_colunas in range(len(tuplo[1]))])+(tuplo[1][nr_de_linhas],))  #juntar a base do tabueliro as especificacoes (possivelmente fazer uma funcao?)
 
     tabuleiro = list(tuple(tuplo[0])+tuple(tabuleiro_pt1))
     return tabuleiro 
