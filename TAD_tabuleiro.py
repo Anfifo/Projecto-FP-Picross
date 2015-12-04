@@ -16,23 +16,20 @@ def cria_tabuleiro(t):
 # eu depois tinha atualizado a e_tabuleiro no Projecto.py
 
 def cria_tabuleiro(tuplo):
-    #len do primeiro tuplo = numero de colunas
-    #len do segundo tuplo= numero de linhas 
-    #numero de linhas = numero de colunas 
     tabuleiro_pt1=[]
     for nr_de_linhas in range (len(tuplo[0])):
-        tabuleiro_pt1.append((list([0 for nr_colunas in range(len(tuplo[1]))])+list((tuplo[1][nr_de_linhas],))))
-    #juntar a base do tabuleiro as especificacoes (possivelmente fazer uma funcao?)
-    tabuleiro = list(((tuplo[0]),))+tabuleiro_pt1
-    return tabuleiro 
-# o tabuleiro e uma lista de tuplos e listas em que cada tuplo e uma espcificacao
-# e cada tuplo de tuplos ou lista corresponde a uma linha do tabuleiro
-
+        tabuleiro_pt1.append([0 for nr_colunas in range(len(tuplo[1]))])
+    especificacoes=[tuplo,]
+    return [tabuleiro_pt1,]+especificacoes
+# retorna um tabuleiro vazio no primeiro elemento e as especificacoes no segundo elemento 
 # e ATENCÃO: A FUNÇÃO TEM DE TESTAR AS CONDIÇÕES!!, por isso vamos ter de utilizar outro sistema em vez do das posições...
+
+#(Andre): afinal nao achei tao boa ideia juntar tudo numa so por isso pus assim, estamos com as cenas separadas 
+
 
 
 # para testar:  cria_tabuleiro((((2, ), (3, ), (2, ), (2, 2), (2, )), ((2, ), (1, 2), (2, ), (3, ), (3, ))))
-# retorna : [((2,), (3,), (2,), (2, 2), (2,)), [0, 0, 0, 0, 0, (2,)], [0, 0, 0, 0, 0, (1, 2)], [0, 0, 0, 0, 0, (2,)], [0, 0, 0, 0, 0, (3,)], [0, 0, 0, 0, 0, (3,)]]
+# retorna :[[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], (((2,), (3,), (2,), (2, 2), (2,)), ((2,), (1, 2), (2,), (3,), (3,)))]
 #--------------------------------------------
 
 
