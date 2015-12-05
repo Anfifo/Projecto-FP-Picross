@@ -21,10 +21,84 @@ def cria_tabuleiro(tuplo):
         tabuleiro_pt1.append([0 for nr_colunas in range(len(tuplo[1]))])
     especificacoes=[tuplo,]
     return [tabuleiro_pt1,]+especificacoes
-# retorna um tabuleiro vazio no primeiro elemento e as especificacoes no segundo elemento 
-# e ATENCÃO: A FUNÇÃO TEM DE TESTAR AS CONDIÇÕES!!, por isso vamos ter de utilizar outro sistema em vez do das posições...
+# retorna um tabuleiro vazio no primeiro elemento e as especificacoes no segundo elemento  
 
-#(Andre): afinal nao achei tao boa ideia juntar tudo numa so por isso pus assim, estamos com as cenas separadas 
+def tabuleiro_dimensoes(tabuleiro):
+    '''recebe um elemento do tipo tabuleiro e retorna um tuplo
+     com as dimensoes deste (linhas,colunas)'''
+    numero_linhas=len(tabuleiro[0])
+    numero_colunas=len(tabuleiro[0][0])
+    if not(e_tabuleiro(tabuleiro)):
+        raise ValueError('tabuleiro_dimensoes: argumentos invalidos')
+    return (numero_linhas, numero_colunas)
+
+def tabuleiro_especificacoes(tabuleiro):
+    ''' recebe um tabuleiro e retornar as especificacoes deste'''
+    if not(e_tabuleiro(tabuleiro)):
+        raise ValueError('tabuleiro_especificacoes: argumentos invalidos')
+    return tabuleiro[1]
+
+def tabuleiro_celula(tabuleiro,coordenada):
+    ''' recebe um tabuleiro e uma coordenada, retorna um elemento do tipo inteiro entre 0 e 2
+    que corresponde ao valor contido na celula da coordenada: 0 se vazia, 1 se estiver branco
+    e 2 se estiver preenchido'''
+    #if not(e_tabuleiro(tabuleiro) and e_coordenada(coordenada)):
+        #raise ValueError('tabuleiro_celula: argumentos invalidos')
+        #nao definida a e_coordenada no meu programa ainda 
+    return tabuleiro[coordenada[0]-1][coordenada[1]-1] # primeiro ve a linha e depois coluna
+
+
+def tabuleiro_preenche_celula(tabuleiro,coordenada,inteiro):
+    '''recebe um tabuleiro, uma coordenada e um inteiro entre 0 2, modifica o tabuleiro
+    e preenche a celula da coordenada com o inteiro, retornando o tabuleiro modificado'''
+    # ValueError com a mensagem ’tabuleiro_preenche_celula: argumentos invalidos’ caso algum
+    # dos argumentos introduzidos não seja válido.
+    
+    #if not(e_tabuleiro(tabuleiro) and e_coordenada(coordenada) and isinstance(inteiro,int)):
+        #raise ValueError('tabuleiro_preenche_celula: argumentos invalidos')
+        #nao definida a e_coordenada no meu programa ainda 
+    tabuleiro[coordenada[0]-1][coordenada[1]-1]=inteiro
+    return tabuleiro
+
+def e_tabuleiro(universal):
+    '''verificar se um universal e um tabuleiro ou nao, retornando true ou false'''
+    try:
+        tabuleiro=universal[0]
+        especificacoes=universal[1]
+        nr_linhas= len(tabuleiro)
+        if not (len(universal)==2 and\
+            isinstance(tabuleiro,list) and\
+            isinstance(especificacoes, tuple)):
+            return False
+            #verificar tabuleiro
+        for i in range(len(tabuleiro)):      
+            nr_colunas = len(tabuleiro[i])
+            if not(nr_colunas == nr_linhas and isinstance(tabuleiro[i], list)):
+                return False
+
+            for j in range(len(tabuleiro[i])):
+                elemento=tabuleiro[i][j]
+                if not ((isinstance(elemento,int) and 0<=elemento<=2)):
+                    return False
+        
+            # verificar especificacoes
+        for i in range(len(especificacoes)):      
+            if not(isinstance(especificacoes[i], tuple)):
+                return False
+
+            for j in range(len(especificacoes[i])):
+                if not (isinstance(especificacoes[i][j],tuple)):
+                    return False 
+
+                for k in range(len(especificacoes[i][j])):
+                    if not(especificacoes[i][j][k]>0):
+                        return False
+
+    except(RuntimeError, TypeError, NameError):
+        return False 
+    return True 
+
+# teste: print(e_tabuleiro(cria_tabuleiro((((2, ), (3, ), (2, ), (2, 2), (2, )), ((2, ), (1, 2), (2, ), (3, ), (3, ))))))
 
 
 
@@ -33,21 +107,6 @@ def cria_tabuleiro(tuplo):
 #--------------------------------------------
 
 
-def tabuleiro_dimensoes(t):
-	nr_linhas = len(t[0])
-	nr_colunas = len(t[1])
-	return (nr_linhas, nr_colunas)
-
-
-def tabuleiro_especificacoes(t):
-	return cria_tabuleiro(t)
-
-
-def tabuleiro_celula(t, c):
-	
-
-def tabuleiro_preenche_celula(t, c, e):                                      # t = tabuleiro, c = coordenada e e = inteiro {0, 1, 2}
-	
 
 def e_tabuleiro(t):
 	for i in range(len(t)):
