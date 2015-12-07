@@ -87,17 +87,8 @@ def e_tabuleiro(universal):
                     return False                                        #sao inteiros >=0 e <=2
         
             # verificar especificacoes
-        for i in range(len(especificacoes)):      
-            if not(isinstance(especificacoes[i], tuple)):      #as especificacoes sao 2 tuplos
-                return False
-
-            for j in range(len(especificacoes[i])):
-                if not (isinstance(especificacoes[i][j],tuple)): #os tuplos das especificacoes 
-                    return False                                 #contem tuplos
-
-                for k in range(len(especificacoes[i][j])): # os elementos das especificacoes
-                    if not(especificacoes[i][j][k]>0):     # sao inteiros > 0
-                        return False
+        if not(e_especificacao(especificacoes)):
+        	return False
 
     except(RuntimeError, TypeError, NameError): # caso alguma das operacoes acima nao seja possivel
         return False                            # entao nao e um tabuleiro
@@ -169,14 +160,14 @@ def escreve_tabuleiro(tabuleiro):
 
 
 
-def e_tabuleiro(t):
+def e_especificacao(t):
 	for i in range(len(t)):
 		for j in range(len(t[i])):
 			for k in range(len(t[i][j])):
 				if not(isinstance(t, tuple)) or\
 				   not(isinstance(t[i], tuple)) or\
 				   not(isinstance(t[i][j], tuple)) or\
-				   not(isinstance(t[i][j][k], int)):
+				   not((isinstance(t[i][j][k], int)) and t[i][j][k]>0):
 					return False
 	return True
 
