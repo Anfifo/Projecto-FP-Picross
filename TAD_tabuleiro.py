@@ -1,9 +1,4 @@
 
-# catarina,  essa que esta ai em cima é aquela antiga tua que tinha um erro neh? olha ve como achas da maneira
-# como esta definido aqui em baixo
-
-# eu depois tinha atualizado a e_tabuleiro no Projecto.py
-
 #TAD tabuleiro
 def cria_tabuleiro(tuplo):
 	'''Recebe um tuplo com as especificacoes das linhas e colunas
