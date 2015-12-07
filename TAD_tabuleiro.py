@@ -170,14 +170,5 @@ def e_especificacao(t):
 				   not((isinstance(t[i][j][k], int)) and t[i][j][k]>0):
 					return False
 	return True
-
-
-def tabuleiro_completo(t):
-	
-
-def tabuleiros_iguais(t1, t2):
-	
-
-def escreve_tabuleiro(t):
 	
 #pepe sucks 
