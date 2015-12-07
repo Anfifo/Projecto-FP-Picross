@@ -17,6 +17,10 @@ def cria_tabuleiro(t):
 
 #TAD tabuleiro
 def cria_tabuleiro(tuplo):
+	'''Recebe um tuplo com as especificacoes das linhas e colunas
+do tabuleiro e devolve o tabuleiro com estas especificacoes '''
+	if not (e_especificacao(tuplo)):
+		raise ValueError('cria_tabuleiro: argumentos invalidos')
     tabuleiro_pt1=[]
     for nr_de_linhas in range (len(tuplo[0])):                  # para cada linha criamos uma lista de zeros
         tabuleiro_pt1.append([0 for nr_colunas in range(len(tuplo[1]))]) #com o mesmo numero de colunas 
