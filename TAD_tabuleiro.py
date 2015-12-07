@@ -134,10 +134,14 @@ def escreve_tabuleiro(tabuleiro):
     for nr_especificacao in range(num_max_Ecol):          # print especificacoes das colunas
         for colunas in range(nr_lin_col):
             try:
-                print(' ',E_col[colunas][(num_max_Ecol)-(nr_especificacao+1)],end='   ')
+                if len(E_col[colunas])>1:
+                    print(' ',E_col[colunas][-((num_max_Ecol)-(nr_especificacao+1))],end='   ')
+                else:
+                    print(' ',E_col[colunas][(num_max_Ecol)-(nr_especificacao+1)],end='   ')
             except(IndexError):
                 print('   ',end='   ')
         print()
+
     for linha in range (nr_lin_col): # print de cada elemento 
         for coluna in range(nr_lin_col):
             if tab[linha][coluna]==2:
@@ -150,9 +154,8 @@ def escreve_tabuleiro(tabuleiro):
         for coluna_E_lin in range (len (E_lin[linha])):
             print(E_lin[linha][coluna_E_lin], end=' ')        #no final de cada linha pomos as especificacoes das linhas
         print("|")
-# falta ordenar as especificacoes das linhas  
+# falta as especificacoes das linhas estarem organizadas com a cena da %
 escreve_tabuleiro(cria_tabuleiro((((2, ), (3, ), (2, ), (2, 2), (2, )), ((2, ), (1, 2), (2, ), (3, ), (3, )))))
-
 
 # para testar:  cria_tabuleiro((((2, ), (3, ), (2, ), (2, 2), (2, )), ((2, ), (1, 2), (2, ), (3, ), (3, ))))
 # retorna :[[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], (((2,), (3,), (2,), (2, 2), (2,)), ((2,), (1, 2), (2,), (3,), (3,)))]
