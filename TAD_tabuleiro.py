@@ -67,7 +67,7 @@ def e_tabuleiro(universal):
     '''verificar se um universal e um tabuleiro ou nao, retornando true ou false'''
     try:
         tabuleiro=universal[0]
-        especificacoes=universal[1]
+        especificacoes= universal[1]
         nr_linhas= len(tabuleiro)
 
         if not (len(universal)==2 and\
@@ -124,39 +124,45 @@ def escreve_tabuleiro(tabuleiro):
 
     if not(e_tabuleiro(tabuleiro)):                #funcao so valida se recebermos um tabueleiro
         raise ValueError('escreve_tabuleiro: argumentos invalidos')
+    
     tab=tabuleiro[0]
     especificacoes= tabuleiro_especificacoes(tabuleiro)
     E_lin= especificacoes[0] #especificacoes das colunas
     E_col = especificacoes[1] #especificacoes das linhas
     nr_lin_col=len(tab) #numero de linhas e colunas
-    num_max_Ecol= max([len(E_col[x]) for x in range(nr_lin_col)])
-    
-    for nr_especificacao in range(num_max_Ecol):          # print especificacoes das colunas
+    dim_Ecol=[len(E_col[x]) for x in range(nr_lin_col)] #len dos numeros
+    num_max_Ecol= max(dim_Ecol)
+    dim_Elin=[len(E_lin[x]) for x in range(nr_lin_col)]
+    num_max_Elin= max(dim_Elin)
+    valores=('?',".","x")
+
+
+    for nr_espec in range(num_max_Ecol):          # print especificacoes das colunas
         for colunas in range(nr_lin_col):
-            try:
-                if len(E_col[colunas])>1:
-                    print(' ',E_col[colunas][-((num_max_Ecol)-(nr_especificacao+1))],end='   ')
-                else:
-                    print(' ',E_col[colunas][(num_max_Ecol)-(nr_especificacao+1)],end='   ')
-            except(IndexError):
+            if dim_Ecol[colunas]-1>=(num_max_Ecol-1)-(nr_espec):
+                print(' ',E_col[colunas][dim_Ecol[colunas]-num_max_Ecol+(nr_espec)],end='   ')
+            else:
                 print('   ',end='   ')
+                
         print()
 
     for linha in range (nr_lin_col): # print de cada elemento 
         for coluna in range(nr_lin_col):
-            if tab[linha][coluna]==2:
-                valor="x"
-            if tab[linha][coluna]==1:
-                valor="."
-            else:
-                valor="?"
-            print ('[',valor,']',end=' ')
-        for coluna_E_lin in range (len (E_lin[linha])):
-            print(E_lin[linha][coluna_E_lin], end=' ')        #no final de cada linha pomos as especificacoes das linhas
+            valor = tab[linha][coluna]
+            print ('[',valores[valor],']',end=' ')
+        for nr_espec in range(num_max_Elin):
+            try: 
+                if nr_espec==num_max_Elin-1:
+                    print(E_lin[linha][nr_espec],end='')    
+                else:
+                    print(E_lin[linha][nr_espec],end=' ')
+            except(IndexError):
+                if nr_espec==num_max_Elin-1:
+                    print('',end=' ')    
+                else:
+                    print(' ',end=' ')
         print("|")
-# falta as especificacoes das linhas estarem organizadas com a cena da %
-escreve_tabuleiro(cria_tabuleiro((((2, ), (3, ), (2, ), (2, 2), (2, )), ((2, ), (1, 2), (2, ), (3, ), (3, )))))
-
+        
 # para testar:  cria_tabuleiro((((2, ), (3, ), (2, ), (2, 2), (2, )), ((2, ), (1, 2), (2, ), (3, ), (3, ))))
 # retorna :[[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], (((2,), (3,), (2,), (2, 2), (2,)), ((2,), (1, 2), (2,), (3,), (3,)))]
 #--------------------------------------------
