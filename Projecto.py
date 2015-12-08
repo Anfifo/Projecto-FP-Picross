@@ -4,30 +4,17 @@
 # Catarina Custodio 84705 #
 #=========================#
 
+#################################################################################################
+#                                  TAD_coordenadas                                               #
+#################################################################################################
+def cria_coordenada(l,c):
+    if not(\
+            isinstance(l,int) and \
+            isinstance(c,int) and \
+            l > 0 and c >0):                              # testar se os valores sao inteiros
+                raise ValueError('cria_coordenada: argumentos invalidos')
+    return (l,c)
 
-###############################################################################################################################
-#                                               TAD_coordenadas                                                               #
-###############################################################################################################################
-
-def cria_coordenada(l, c):
-	if not(verifica_coordenada(l,c)):                                               # utiliza uma funcao auxiliar para verificar as condicoes
-		raise ValueError('cria_coordenada: argumentos invalidos')
-	return (l,c)
-
-############## Funcao Auxiliar ###################
-
-def verifica_coordenada(l,c):
-	if not(\
-			isinstance(l,(int)) and\
-			isinstance(c,(int))and\
-			l <= 0 and c <= 0\
-			):			        # testar se os valores sao inteiros   # testar se os valores sao positivos
-			return False
-	return True
-
-##################################################
-	
-	
 def coordenada_linha(coordenada):                       # o primeiro valor do tuplo da a coordenada da linha
     if not e_coordenada(coordenada):
         raise ValueError("coordenada_linha: argumentos invalidos")
@@ -36,35 +23,49 @@ def coordenada_linha(coordenada):                       # o primeiro valor do tu
 def coordenada_coluna(coordenada):
     if not e_coordenada(coordenada):
         raise ValueError("coordenada_coluna: argumentos invalidos")
-    return coordenada[1]  
-    
-	
-def e_coordenada(coordenada):					                # testar se os dados inseridos correspondem ao tipo coordenada	
-	if isinstance(coordenada, tuple):
-		return verifica_coordenada(coordenada_linha(coordenada), coordenada_coluna(coordenada))
-	else:
-		return False                                    	                # caso nao seja tuplo, retorna False
+    return coordenada[1]                            # o segundo valor do tuplo da a coordenada da coluna 
 
+def e_coordenada(coordenada):
+    try:
+        if not(\
+                isinstance(coordenada, (tuple)) and\
+                isinstance(coordenada[0],int) and\
+                isinstance(coordenada[1],int) and\
+                coordenada[0] > 0 and\
+                coordenada[1] > 0\
+                ):
+                return False    # verificar que os elementos do tuplo sao inteiros
+    except(IndexError,TypeError,NameError):
+        return False
+    return True
 
 def coordenadas_iguais(coordenada1, coordenada2):
-	if not (e_coordenada(coordenada1) and e_coordenada(coordenada2)):
-		raise ValueError('coordenadas_iguais: argumentos invalidos') 
-	if not(coordenada_linha(coordenada1) == coordenada_linha(coordenada2) and\
-		coordenada_coluna(coordenada1) == coordenada_coluna(cordenada2)):	        		
-		return False
-	return True 
-
+    if not (e_coordenada(coordenada1) and e_coordenada(coordenada2)):
+        raise ValueError('coordenadas_iguais: argumentos invalidos') 
+    if not (coordenada1[0] == coordenada2[0] and coordenada1[1] == coordenada2[1]):       # comparar a posicao 1 das duas coordenadas, e fazer o mesmo para a segunda coordenada
+        return False
+    return True 
 
 def coordenada_para_cadeia(coordenada):
     if not e_coordenada(coordenada):
         raise ValueError('coordenada_para_cadeia: argumentos invalidos')
-	linha = str(coordenada_linha(coordenada))			                # transforma a coordenada da linha numa string
-	coluna = str(coordenada_coluna(coordenada))			                # transforma a coordenada da coluna numa string
-	cadeia = '(' + linha + " : " + coluna + ')'			                # junta os varios elementos da string
-	return cadeia
+    linha = str(coordenada_linha(coordenada))               # transforma a coordenada da linha numa string
+    coluna = str(coordenada_coluna(coordenada))             # transforma a coordenada da coluna numa string
+    cadeia = '(' + linha + " : " + coluna + ')'             # junta os varios elementos da string
+    return cadeia
+
+#-------------------------------------------------------------------------------------------
 
 
-	
+
+
+
+
+
+
+
+
+
 ########################################################################################
 #                                      TAD_Tabuleiro
 ########################################################################################
@@ -160,7 +161,7 @@ def tabuleiros_iguais(tabuleiro_1,tabuleiro_2):
                     espec_1[1][col]==espec_2[1][col]\
                     ):
                     return False
-    except(IndexError):
+    except(IndexError,TypeError):
         return False  
     return True
 
@@ -181,24 +182,24 @@ def escreve_tabuleiro(tabuleiro):
     for i in range(max(dim_Ecol)):          # print especificacoes das colunas
         for colunas in range(nr_lin_col):
             if dim_Ecol[colunas]>=max(dim_Ecol)-(i):
-                print(' ',E_col[colunas][dim_Ecol[colunas]-max(dim_Ecol)+(i)],end='   ')
+                print(' ',E_col[colunas][dim_Ecol[colunas]-max(dim_Ecol)+(i)],end='  ')
             else:
-                print('   ',end='   ')   
-        print()
-
-    for l in range (nr_lin_col): # print de cada elemento 
+                print('   ',end='  ')   
+        print(' ')
+#===========print cada elemento========================
+    for l in range (nr_lin_col): 
         for coluna in range(nr_lin_col):
-            print ('[',valores[tab[l][coluna]],']',end=' ')
-
+            print ('[',valores[tab[l][coluna]],']',end='')
+#===========print das especificacoes das linhas============
         for i in range(max(dim_Elin)):
             if len(E_lin[l])>=i+1:
                 if i==max(dim_Elin)-1:
-                    print(E_lin[l][i],end='')
+                    print('',E_lin[l][i],end='')
                 else:
-                    print(E_lin[l][i],end=' ')    
+                    print('',E_lin[l][i],end='')    
             else:
                 if i==max(dim_Elin)-1:
-                    print('',end=' ')    
+                    print(' ',end=' ')    
                 else:
                     print(' ',end=' ')
         print("|")
@@ -234,14 +235,17 @@ def tabuleiro_completo(tabuleiro):
 
 def e_especificacao(t):
     '''recebe um argumento t e verifica se t e um tuplo'''
-    for i in range(len(t)):
-        for j in range(len(t[i])):
-            for k in range(len(t[i][j])):
-                if not(isinstance(t, tuple)) or\
-                   not(isinstance(t[i], tuple)) or\
-                   not(isinstance(t[i][j], tuple)) or\
-                   not((isinstance(t[i][j][k], int)) and t[i][j][k]>0):
-                    return False
+    try:
+        for i in range(len(t)):
+            for j in range(len(t[i])):
+                for k in range(len(t[i][j])):
+                    if not(isinstance(t, tuple)) or\
+                        not(isinstance(t[i], tuple)) or\
+                        not(isinstance(t[i][j], tuple)) or\
+                        not((isinstance(t[i][j][k], int)) and t[i][j][k]>0):
+                        return False
+    except(TypeError,IndexError):
+        return False 
     return True
     
 
@@ -291,7 +295,14 @@ def jogadas_iguais (jog1,jog2):
 def jogada_para_cadeia(jogada):  #tem de retornar "coordenada --> valor" 
     coordenada = jogada_coordenada(jogada)
     valor = jogada_valor(jogada)
-    return str(str(coordenada_para_cadeia(coordenada))+ "-->" + str(valor))
+    return str(str(coordenada_para_cadeia(coordenada))+ " --> " + str(valor))
+
+
+
+
+########################################################################################
+#                                      Funcoes adicionais
+########################################################################################
 
 
 
@@ -318,7 +329,7 @@ def jogada_para_cadeia(jogada):  #tem de retornar "coordenada --> valor"
 #pepe sucks 
 # https://docs.python.org/2/library/stdtypes.html#string-formatting
 #escreve_tabuleiro(cria_tabuleiro((((2, ), (3, ), (2, ), (2, 2), (2, )), ((2, ), (1, 2), (2,3,4,5,6,7 ), (3, ), (3, )))))
-def teste():''' e=(((2,), (3,), (2,), (2, 2), (2,)), ((2,), (1, 2), (2,), (3,), (3,)))
+'''e=(((2,), (3,), (2,), (2, 2), (2,)), ((2,), (1, 2), (2,), (3,), (3,)))
 t = cria_tabuleiro(e)
 tabuleiro_dimensoes(t)
 print("(5, 5)")
@@ -372,7 +383,9 @@ t2 = tabuleiro_preenche_celula(t, cria_coordenada(5, 4), 1)
 t2 = tabuleiro_preenche_celula(t, cria_coordenada(5, 5), 1)
 escreve_tabuleiro(t)
 print(tabuleiro_completo(t))
-print("true")''' 
+print("true")
+escreve_tabuleiro(cria_tabuleiro((((1,),(3,),(1,)),((3,),(1,),(1,)))))
+'''
 
 
 #J = cria_jogada(cria_coordenada(1, 1), 2)
@@ -385,3 +398,4 @@ print("true")'''
 #print(jogadas_iguais(J, J2))
 #J2 = cria_jogada(cria_coordenada(1, 1), 2)
 #print(jogadas_iguais(J, J2))
+
