@@ -12,29 +12,32 @@
 def cria_coordenada(l, c):
 	if not(verifica_coordenada(l,c)):                                               # utiliza uma funcao auxiliar para verificar as condicoes
 		raise ValueError('cria_coordenada: argumentos invalidos')
-	else:
-		return (l,c)
+	return (l,c)
 
 ############## Funcao Auxiliar ###################
 
 def verifica_coordenada(l,c):
-	if not(isinstance(l,(int)) and isinstance(c,(int))):			        # testar se os valores sao inteiros
-		return False
-	if l <= 0 or c <= 0:							        # testar se os valores sao positivos
-		return False
-	else:
-		return True
+	if not(\
+			isinstance(l,(int)) and\
+			isinstance(c,(int))and\
+			l <= 0 and c <= 0\
+			):			        # testar se os valores sao inteiros   # testar se os valores sao positivos
+			return False
+	return True
 
 ##################################################
 	
 	
-def coordenada_linha(coordenada):						        # o primeiro valor do tuplo da a coordenada da linha
-	return coordenada[0]
-	
-	
+def coordenada_linha(coordenada):                       # o primeiro valor do tuplo da a coordenada da linha
+    if not e_coordenada(coordenada):
+        raise ValueError("coordenada_linha: argumentos invalidos")
+    return coordenada[0]
+    
 def coordenada_coluna(coordenada):
-	return coordenada[1]					                        # o segundo valor do tuplo da a coordenada da coluna 
-
+    if not e_coordenada(coordenada):
+        raise ValueError("coordenada_coluna: argumentos invalidos")
+    return coordenada[1]  
+    
 	
 def e_coordenada(coordenada):					                # testar se os dados inseridos correspondem ao tipo coordenada	
 	if isinstance(coordenada, tuple):
@@ -44,13 +47,17 @@ def e_coordenada(coordenada):					                # testar se os dados inseridos
 
 
 def coordenadas_iguais(coordenada1, coordenada2):
-	if coordenada_linha(coordenada1) == coordenada_linha(coordenada2) and coordenada_coluna(coordenada1) == coordenada_coluna(cordenada2):	        		
-		return True
-	else:									        
+	if not (e_coordenada(coordenada1) and e_coordenada(coordenada2)):
+		raise ValueError('coordenadas_iguais: argumentos invalidos') 
+	if not(coordenada_linha(coordenada1) == coordenada_linha(coordenada2) and\
+		coordenada_coluna(coordenada1) == coordenada_coluna(cordenada2)):	        		
 		return False
+	return True 
 
 
 def coordenada_para_cadeia(coordenada):
+    if not e_coordenada(coordenada):
+        raise ValueError('coordenada_para_cadeia: argumentos invalidos')
 	linha = str(coordenada_linha(coordenada))			                # transforma a coordenada da linha numa string
 	coluna = str(coordenada_coluna(coordenada))			                # transforma a coordenada da coluna numa string
 	cadeia = '(' + linha + " : " + coluna + ')'			                # junta os varios elementos da string
