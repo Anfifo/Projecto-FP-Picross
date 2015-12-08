@@ -58,10 +58,11 @@ def coordenada_para_cadeia(coordenada):
 
 
 	
-#################################################################################################################################
-#                                             TAD_Tabuleiro                                                                     #
-#################################################################################################################################
+########################################################################################
+#                                      TAD_Tabuleiro
+########################################################################################
 
+#TAD tabuleiro
 def cria_tabuleiro(tuplo):
     '''Recebe um tuplo com as especificacoes das linhas e colunas
     do tabuleiro e devolve o tabuleiro com estas especificacoes '''
@@ -133,7 +134,6 @@ def e_tabuleiro(universal):
         return False                            # entao nao e um tabuleiro
     return True 
 
-# teste: print(e_tabuleiro(cria_tabuleiro((((2, ), (3, ), (2, ), (2, 2), (2, )), ((2, ), (1, 2), (2, ), (3, ), (3, ))))))
 
 
 def tabuleiros_iguais(tabuleiro_1,tabuleiro_2):
@@ -219,9 +219,9 @@ def tabuleiro_completo(tabuleiro):
     return True 
 
 
-# para testar:  cria_tabuleiro((((2, ), (3, ), (2, ), (2, 2), (2, )), ((2, ), (1, 2), (2, ), (3, ), (3, ))))
-# retorna :[[[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], (((2,), (3,), (2,), (2, 2), (2,)), ((2,), (1, 2), (2,), (3,), (3,)))]
-#--------------------------------------------
+########################################################################################
+#                                      Aux_TAD_tabuleiro
+########################################################################################
 
 
 
@@ -237,14 +237,81 @@ def e_especificacao(t):
                     return False
     return True
     
+
+
+########################################################################################
+#                                      TAD_Jogada
+########################################################################################
+
+
+
+def cria_jogada(coordenada, inteiro):
+    if not (e_coordenada(coordenada) and 0<inteiro<=2):
+        raise ValueError('cria_jogada: argumentos invalidos')
+    jogada = (coordenada,inteiro)
+    return jogada # para definir jogada temos de definir tabuleiro 
+
+def jogada_coordenada(jogada):
+    if not e_jogada:
+        raise ValueError('jogada_coodernada: argumentos invalidos')
+    return jogada[0]
+
+def jogada_valor(jogada):
+    if not e_jogada:
+        raise ValueError('jogada_valor: argumentos invalidos')
+    return jogada[1]
+
+def e_jogada (universal):
+    try:
+        coordenada=universal[0]
+        inteiro=universal[1]
+        if not(e_coordenada(coordenada) and 0< inteiro<= 2):
+            return False
+    except(IndexError,TypeError,NameError,ValueError):
+        return False 
+    return True 
+
+def jogadas_iguais (jog1,jog2):
+    if not (e_jogada(jog1) and e_jogada(jog2)):
+        raise ValueError('jogadas_iguais: argumentos invalidos')
+    if not (\
+            jogada_coordenada(jog1)==jogada_coordenada(jog2)and\
+            jogada_valor(jog1)==jogada_valor(jog2)
+            ):              
+        return False 
+    return True 
+
+def jogada_para_cadeia(jogada):  #tem de retornar "coordenada --> valor" 
+    coordenada = jogada_coordenada(jogada)
+    valor = jogada_valor(jogada)
+    return str(str(coordenada_para_cadeia(coordenada))+ "-->" + str(valor))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#------------------------------------------------------------------------
+########################################################################################
+#                                      Testes
+########################################################################################
+
 #pepe sucks 
 # https://docs.python.org/2/library/stdtypes.html#string-formatting
 #escreve_tabuleiro(cria_tabuleiro((((2, ), (3, ), (2, ), (2, 2), (2, )), ((2, ), (1, 2), (2,3,4,5,6,7 ), (3, ), (3, )))))
-
-
-
-# testes do pdf com a resposta correcta logo em seguida
-e=(((2,), (3,), (2,), (2, 2), (2,)), ((2,), (1, 2), (2,), (3,), (3,)))
+def teste():''' e=(((2,), (3,), (2,), (2, 2), (2,)), ((2,), (1, 2), (2,), (3,), (3,)))
 t = cria_tabuleiro(e)
 tabuleiro_dimensoes(t)
 print("(5, 5)")
@@ -298,5 +365,16 @@ t2 = tabuleiro_preenche_celula(t, cria_coordenada(5, 4), 1)
 t2 = tabuleiro_preenche_celula(t, cria_coordenada(5, 5), 1)
 escreve_tabuleiro(t)
 print(tabuleiro_completo(t))
-print("true")
+print("true")''' 
 
+
+#J = cria_jogada(cria_coordenada(1, 1), 2)
+#print(jogada_para_cadeia(J))
+#print(coordenada_para_cadeia(jogada_coordenada(J)))
+#print(jogada_valor(J))
+#print(e_jogada(0))
+#print(e_jogada(J))
+#J2 = cria_jogada(cria_coordenada(1, 1), 1)
+#print(jogadas_iguais(J, J2))
+#J2 = cria_jogada(cria_coordenada(1, 1), 2)
+#print(jogadas_iguais(J, J2))
