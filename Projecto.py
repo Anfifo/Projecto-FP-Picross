@@ -11,11 +11,13 @@
 # da linha e (2) a posicao da coluna     #
 #========================================#
 
+import traceback
+
+
 #_____________Construtor______________
 def cria_coordenada(l,c):
     ''' cria_coordenada: int x int -> coordenada
         cria_coordenada (l,c) cria a coordenada de linha l e coluna c'''
-    
     if not(\
             isinstance(l,int) and \
             isinstance(c,int) and \
@@ -32,7 +34,6 @@ def cria_coordenada(l,c):
 def coordenada_linha(coordenada):
     ''' coordenada_linha: coordenada -> int
         devolve o int da linha correspondente a coordenada'''
-    
     if not e_coordenada(coordenada):
         raise ValueError("coordenada_linha: argumentos invalidos")
     
@@ -43,7 +44,7 @@ def coordenada_linha(coordenada):
 def coordenada_coluna(coordenada):
     ''' coordenada_coluna: coordenada - > int
         devolve o int da coluna corresponde a coordenada'''
-    
+
     if not e_coordenada(coordenada):
         raise ValueError("coordenada_coluna: argumentos invalidos")
     return int(coordenada[1])
@@ -58,7 +59,7 @@ def e_coordenada(universal):
     ''' e_coordenada: universal -> logico
         devolve True caso o universal seja uma coordenada,
         caso contrario False'''
-    
+
     try:
         if not(\
                 isinstance(universal, (tuple)) and\
@@ -68,7 +69,7 @@ def e_coordenada(universal):
                 universal[1] > 0\
                 ):
                 return False
-    except(IndexError,TypeError,NameError):
+    except(RuntimeError,IndexError,TypeError,NameError):
         return False
 
     return True
@@ -81,12 +82,8 @@ def coordenadas_iguais(cord1, cord2):
         recebe 2 argumentos (coordenadas) e retorna
         True caso sejam iguais, False caso contrario'''
 
-    if not (e_coordenada(cord1) and e_coordenada(cord2)):
-        raise ValueError('coordenadas_iguais: argumentos invalidos') 
-    if not (\
-            coordenada_linha(cord1) == coordenada_linha(cord2) and\
-            coordenada_coluna(cord1) == coordenada_coluna(cord2)\
-            ):       # comparar a posicao 1 das duas coordenadas, e fazer o mesmo para a segunda coordenada
+    if not (coordenada_linha(cord1) == coordenada_linha(cord2)\
+            and coordenada_coluna(cord1) == coordenada_coluna(cord2)):
             return False
     
     return True 
@@ -98,7 +95,7 @@ def coordenadas_iguais(cord1, cord2):
 
 def coordenada_para_cadeia(coordenada):
     ''' coordenada_para_cadeia: coordenada -> string
-        devolve a representacao da coordenada em string'''
+    devolve a representacao da coordenada em string'''
 
     if not e_coordenada(coordenada):
         raise ValueError('coordenada_para_cadeia: argumentos invalidos')
@@ -126,7 +123,6 @@ def coordenada_para_cadeia(coordenada):
 def cria_tabuleiro(tuplo):
     ''' cria_tabuleiro: tuplo(especificacoes) -> tabuleiro
         devolve um tabuleiro vazio com as dimensoes das especificacoes'''
-
     if not (e_especificacao(tuplo)):
         raise ValueError('cria_tabuleiro: argumentos invalidos')
     tab=[]
@@ -152,7 +148,8 @@ def e_especificacao(t):
                         not(isinstance(t[i][j], tuple)) or\
                         not((isinstance(t[i][j][k], int)) and t[i][j][k]>=0):
                         return False
-    except(TypeError,IndexError):
+
+    except(RuntimeError,TypeError,IndexError):
         return False 
     
     return True
@@ -163,56 +160,72 @@ def e_especificacao(t):
 #__________________ Selectores ___________________________________
 
 def tabuleiro_dimensoes(tabuleiro):
-    '''recebe um elemento do tipo tabuleiro e retorna um tuplo
-     com as dimensoes deste (linhas,colunas)'''
-    
+    '''tabuleiro_dimensoes: tabuleiro -> tuplo
+        retorna um tuplo com as dimensoes do tabuleiro'''
+
     if not(e_tabuleiro(tabuleiro)):                #funcao so valida se recebermos um tabueleiro
         raise ValueError('tabuleiro_dimensoes: argumentos invalidos')
-    nr_lin=len (tabuleiro_especificacoes(tabuleiro)[1])
+    nr_lin=len(tabuleiro_especificacoes(tabuleiro)[1])
     nr_col=len(tabuleiro_especificacoes(tabuleiro)[0])
     return (nr_lin, nr_col)
 # fim tabuleiro_dimensoes # 
 
 
+
 def numero_linhas (tabuleiro):
-    return coordenada_linha(tabuleiro_dimensoes(tabuleiro))
+    ''' numero_linhas: tabuleiro -> int
+        retorna o numero de linhas do tabuleiro'''
+    
+    return tabuleiro_dimensoes(tabuleiro)[0]
 # fim numero_linhas #
 
 
+
 def numero_colunas (tabuleiro):
-    return coordenada_coluna(tabuleiro_dimensoes(tabuleiro))
+    ''' numero_colunas: tabuleiro - > int
+        retorna o numero de colunas do tabuleiro'''
+    
+    return tabuleiro_dimensoes(tabuleiro)[1]
 # fim numero_colunas #
 
 
+
 def tabuleiro_especificacoes(tabuleiro):
-    ''' recebe um tabuleiro e retornar as especificacoes deste'''
+    ''' tabuleiro_especificacoes: tabuleiro -> tuplo
+        retorna um tuplo com as especificacoes do tabuleiro'''
+
     if not(e_tabuleiro(tabuleiro)):
         raise ValueError('tabuleiro_especificacoes: argumentos invalidos')
+    
     return tabuleiro[1]
 # fim tabuleiro_especificacoes #
 
 
+
 def tabuleiro_celula(tabuleiro,coordenada):
-    ''' recebe um tabuleiro e uma coordenada, retorna um elemento do tipo inteiro entre 0 e 2
-    que corresponde ao valor contido na celula da coordenada: 0 se vazia, 1 se estiver branco
-    e 2 se estiver preenchido'''
+    ''' tabuleiro_celula: tabuleiro x coordenada -> int
+        devolve o valor da celula correspondente a coordenada no tabuleiro'''
+
     if not(e_tabuleiro(tabuleiro) and e_coordenada(coordenada)):
         raise ValueError('tabuleiro_celula: argumentos invalidos') 
     try:    
         linha = coordenada_linha(coordenada)-1
         coluna = coordenada_coluna(coordenada)-1
         celula = tabuleiro[0][linha][coluna]
-    except(TypeError,NameError,ValueError,IndexError):
+    except(RuntimeError,TypeError,NameError,ValueError,IndexError):
         raise ValueError('tabuleiro_celula: argumentos invalidos')   
     return celula
 # fim tabuleiro_celula #
 
 
+
 #___________________Transformadores________________________
 
 def tabuleiro_preenche_celula(tabuleiro,coordenada,inteiro):
-    '''recebe um tabuleiro, uma coordenada e um inteiro entre 0 2, modifica o tabuleiro
-    e preenche a celula da coordenada com o inteiro, retornando o tabuleiro modificado'''   
+    ''' tabuleiro_preenche_celula: tabuleiro x coordenada x [0,1,2] -> tabuleiro 
+        preenche a celula na coordenada do tabuleiro com o valor inteiro
+        e devolve o tabuleiro com a celula preenchida'''
+
     if not (e_tabuleiro(tabuleiro) and e_coordenada(coordenada) and\
             isinstance(inteiro,int) and 0<= inteiro<= 2 ):
             raise ValueError('tabuleiro_preenche_celula: argumentos invalidos')
@@ -221,25 +234,26 @@ def tabuleiro_preenche_celula(tabuleiro,coordenada,inteiro):
         coluna= coordenada_coluna(coordenada)
         tabuleiro[0][linha-1][coluna-1] = inteiro
 
-    except(TypeError,NameError,ValueError,IndexError):
+    except(RuntimeError,TypeError,NameError,ValueError,IndexError):
         raise ValueError('tabuleiro_preenche_celula: argumentos invalidos')
     return tabuleiro
 # fim tabuleiro_preenche_celula #
 
 
 def escreve_tabuleiro(tabuleiro):
+    ''' escreve_tabuleiro: tabuleiro -> {}
+        escreve a estrutura grafica do tabuleiro'''
+
     if not(e_tabuleiro(tabuleiro)):                #funcao so valida se recebermos um tabueleiro
         raise ValueError('escreve_tabuleiro: argumentos invalidos')
     
     especificacoes= tabuleiro_especificacoes(tabuleiro)
     nr_lin_col= numero_colunas(tabuleiro)
-    E_lin= especificacoes[0] 
-    E_col= especificacoes[1]  
+    E_lin= especificacoes[0]
+    E_col= especificacoes[1]
     dim_Ecol= [len(E_col[x]) for x in range(nr_lin_col)]
     dim_Elin= [len(E_lin[x]) for x in range(nr_lin_col)]
     valores=('?',".","x")
-    tab=tabuleiro[0]
-
 #- - print especificacoes das colunas - -
     for i in range(max(dim_Ecol)):         
         for colunas in range(nr_lin_col):
@@ -252,7 +266,7 @@ def escreve_tabuleiro(tabuleiro):
 #- - print do elemento de cada linha - -
     for l in range (nr_lin_col): 
         for coluna in range(nr_lin_col):
-            print ('[',valores[tab[l][coluna]],']',end='')
+            print ('[',valores[tabuleiro_celula(tabuleiro,cria_coordenada(l+1,coluna+1))],']',end='')
 
 #- - print das especificacoes das colunas - - 
         for i in range(max(dim_Elin)):
@@ -274,7 +288,8 @@ def escreve_tabuleiro(tabuleiro):
 
 #____________________Reconhecedores________________________
 def e_tabuleiro(universal):
-    '''verificar se um universal e um tabuleiro ou nao, retornando true ou false'''
+    ''' e_tabuleiro: universal -> logico
+        devolve True se o universal for tabuleiro, caso contrario False'''
     try:
         tab=universal[0]
         especificacoes= universal[1]
@@ -296,30 +311,33 @@ def e_tabuleiro(universal):
 # verificar as especificacoes 
         if not(e_especificacao(especificacoes)):
             return False
-    except(RuntimeError, TypeError, NameError,IndexError): # caso alguma das operacoes acima nao seja possivel
+    except(RuntimeError,ValueError, TypeError, NameError,IndexError): # caso alguma das operacoes acima nao seja possivel
         return False                            # entao nao e um tabuleiro
     return True 
 # fim e_tabuleiro #
 
 
 def tabuleiros_iguais(tabuleiro_1,tabuleiro_2):
+    ''' tabuleiros_iguais: tabuleiro_1 x tabuleiro_2 -> logico
+        devolve, True se os 2 tabuleiros forem iguais, caso contrario, False'''
+
     if not (e_tabuleiro(tabuleiro_1) and e_tabuleiro(tabuleiro_2)):
         raise ValueError('cria_jogada: argumentos invalidos')
     try:
-        tab1=tabuleiro_1[0]
-        tab2=tabuleiro_2[0]
         espec_1=tabuleiro_especificacoes(tabuleiro_1)
         espec_2=tabuleiro_especificacoes(tabuleiro_2)
-
-        for lin in range(len(tab1)):
-            for col in range (len(tab1[lin])):
+        nr_linhas=numero_linhas(tabuleiro_1)
+        nr_colunas=numero_colunas(tabuleiro_1)
+        for lin in range(nr_linhas):
+            for col in range (nr_colunas):
                 if not(\
-                    tab1[lin][col]==tab2[lin][col] and\
+                    tabuleiro_celula(tabuleiro_1,cria_coordenada(lin+1,col+1))==\
+                    tabuleiro_celula(tabuleiro_2,cria_coordenada(lin+1,col+1)) and\
                     espec_1[0][lin]==espec_2[0][lin]and\
                     espec_1[1][col]==espec_2[1][col]\
                     ):
                     return False
-    except(IndexError,TypeError):
+    except(RuntimeError,IndexError,TypeError):
         return False  
     return True
 # fim tabuleiros_iguais #
@@ -327,6 +345,10 @@ def tabuleiros_iguais(tabuleiro_1,tabuleiro_2):
 
 
 def tabuleiro_completo(tabuleiro):
+    ''' tabuleiro_completo: tabuleiro -> logico
+        devolve True se o tabuleiro estiver completo seguindo as especificacoes,
+        caso contrario devolve False'''
+
     if not(e_tabuleiro(tabuleiro)):
         raise ValueError('tabuleiro_completo: argumentos invalidos')
     especificacoes=tabuleiro_especificacoes(tabuleiro)
@@ -336,9 +358,9 @@ def tabuleiro_completo(tabuleiro):
     if not (tabuleiro_preenchido(tabuleiro)):
         return False 
 
-    for i in range (coordenada_linha(tabuleiro_dimensoes(tabuleiro))):
-        coluna = [tabuleiro_celula(tabuleiro,cria_coordenada((l+1),(i+1))) for l in range (coordenada_linha(tabuleiro_dimensoes(tabuleiro)))]
-        linha = [tabuleiro_celula(tabuleiro,cria_coordenada((i+1),(c+1))) for c in range (coordenada_linha(tabuleiro_dimensoes(tabuleiro)))]
+    for i in range(numero_linhas(tabuleiro)):
+        coluna = [tabuleiro_celula(tabuleiro,cria_coordenada((l+1),(i+1))) for l in range (numero_linhas(tabuleiro))]
+        linha = [tabuleiro_celula(tabuleiro,cria_coordenada((i+1),(c+1))) for c in range (numero_colunas(tabuleiro))]
         if not(\
                 sum(E_lin[i]) == linha.count(2) and\
                 len(E_lin[i])-1 <= linha.count(1) and\
@@ -351,9 +373,9 @@ def tabuleiro_completo(tabuleiro):
 
 
 def tabuleiro_preenchido(tabuleiro):
-    ''' tabuleiro -> boleano
-        recebe um tabuleiro e retorna True apenas se este nao tiver 
-        nenhuma celula a zero, ou seja se estiver preenchido'''
+    ''' tabuleiro -> logico
+        retorna True apenas se este nao tiver nenhuma 
+        celula a zero, ou seja se estiver preenchido'''
     for i in range (coordenada_linha(tabuleiro_dimensoes(tabuleiro))):
         for j in range (coordenada_coluna(tabuleiro_dimensoes(tabuleiro))):
             if tabuleiro_celula(tabuleiro,cria_coordenada(i+1,j+1))==0:
@@ -373,39 +395,67 @@ def tabuleiro_preenchido(tabuleiro):
 #____________________Construtor_________________________
 
 def cria_jogada(coordenada, inteiro):
-    if not (e_coordenada(coordenada) and 0<inteiro<=2):
+    ''' cria_jogada: coordenada x inteiro -> jogada
+        devolve uma jogada que resulta de juncao de 
+        uma coordenada com o valor a ser colocada na celula da coordenada'''
+
+    if not (e_coordenada(coordenada) and isinstance(inteiro,int) and 0<inteiro<=2):
         raise ValueError('cria_jogada: argumentos invalidos')
     jogada = (coordenada,inteiro)
+    
     return jogada # para definir jogada temos de definir tabuleiro 
 # fim cria_jogada #
 
+
+
 #____________________Selectores______________________
 def jogada_coordenada(jogada):
+    ''' jogada_coordenada: jogada -> tuplo
+        devolve o tuplo da coordenada a que corresponde a jogada'''
+
     if not e_jogada:
         raise ValueError('jogada_coodernada: argumentos invalidos')
+    
     return jogada[0]
 # fim jogada_coordenada #
 
+
+
 def jogada_valor(jogada):
+    ''' jogada_valor: jogada -> int
+        devolve o inteiro correspondente ao valor da jogada'''
+
     if not e_jogada:
         raise ValueError('jogada_valor: argumentos invalidos')
+    
     return jogada[1]
 # fim jogada_valor #
+
+
 
 #____________________Reconhecedores________________________
 
 def e_jogada (universal):
+    ''' e_jogada: universal -> logico
+        devolve se for jogada, True, caso contrario, False'''
+
     try:
-        coordenada=universal[0]
-        inteiro=universal[1]
-        if not(e_coordenada(coordenada) and 0< inteiro<= 2):
+        coordenada= jogada_coordenada(universal)
+        inteiro=jogada_valor(universal)
+        if not(e_coordenada(coordenada) and isinstance(inteiro,int) and 0< inteiro<= 2):
             return False
-    except(IndexError,TypeError,NameError,ValueError):
+    except(RuntimeError,IndexError,TypeError,NameError,ValueError):
         return False 
+
     return True 
 # fim e_jogada #
 
+
+
 def jogadas_iguais (jog1,jog2):
+    ''' jogadas_iguais: jogada x jogada -> logico
+        devolve True se as 2 jogadas foram iguais, caso contrario False'''
+
     if not (e_jogada(jog1) and e_jogada(jog2)):
         return False 
     if not (\
@@ -416,11 +466,17 @@ def jogadas_iguais (jog1,jog2):
     return True 
 # fim jogadas_iguais #
 
+
+
 #_______________________________Transformadores___________________________________
 
 def jogada_para_cadeia(jogada):  #tem de retornar "coordenada --> valor" 
+    ''' jogada_para_cadeia: jogada -> string
+        devolve a representacao de um jogada em string'''
+
     coordenada = jogada_coordenada(jogada)
     valor = jogada_valor(jogada)
+
     return str(str(coordenada_para_cadeia(coordenada))+ " --> " + str(valor))
 # fim jogada_para_cadeia #
 
@@ -428,10 +484,13 @@ def jogada_para_cadeia(jogada):  #tem de retornar "coordenada --> valor"
 
 #_______________________________Funcoes Auxiliares_________________________________
 def le_tabuleiro(string):
-    ''' recebe uma string que é um nome de um ficheiro com os dados da 
-    especificacao e devolve o tuplo das especificacoes'''
+    ''' le_tabuleiro: string -> tuplo
+        devolve o tuplo lido do ficheiro do nome string'''
+
     ficheiro=open(string,"r")
     especificacoes = eval (ficheiro.readline())
+    ficheiro.close()
+
     return especificacoes
 # fim le_tabuleiro #
 
@@ -439,61 +498,74 @@ def le_tabuleiro(string):
 
 
 def pede_jogada(tabuleiro):
-    ''' tabuleiro -> jogada
-    recebe o tabuleiro do jogo e devolva a jogada que o jogador quer executar'''
+    ''' pede_jogada: tabuleiro -> jogada
+        devolva a jogada que o jogador quer executar'''
 #recebe os inputs da jogada 
+
     string = input ('Introduza a jogada\n- coordenada entre (1 : 1) e '+\
-                    coordenada_para_cadeia(tabuleiro_dimensoes(tabuleiro))+' >> ')
-    valor = int(input ("- valor >> "))
+                coordenada_para_cadeia(tabuleiro_dimensoes(tabuleiro))+' >> ')
+    valor = input ("- valor >> ")
 
 # avalia o input 
-    coordenadas = eval(string.replace(":",","))
-    coordenada = cria_coordenada(int(coordenadas[0]),int(coordenadas[1]))
 
+    string = string.replace(' ','')
+
+    if not (len (string)==5 and string[0]=='(' and string[-1]==")" and string[2] == ':'):
+        return False
+
+    try:
+        coordenadas = (int(string[1]), int(string[3]))
+    except:
+        return False
+
+    coordenada = cria_coordenada(coordenadas[0],coordenadas[1])
 # verifica a avaliacao do input 
-    if not (e_coordenada(coordenada) and\
-            coordenada[0]<= coordenada_linha(tabuleiro_dimensoes(tabuleiro)) and\
-            coordenada[1]<= coordenada_coluna(tabuleiro_dimensoes(tabuleiro))\
-            ):
-        return False 
+    if valor.isdigit():
+        valor = int(valor)
+    if not (e_coordenada(coordenada)\
+            and 0<coordenada_coluna(coordenada)<= numero_colunas(tabuleiro)\
+            and 0<coordenada_linha(coordenada)<= numero_linhas(tabuleiro)):
+                return False 
     return cria_jogada(coordenada,valor)
 # fim pede_jogada #
 
 
+
+
+
+
 #______________________________ Funcao Principal ______________________
 def jogo_picross (string):
-    '''funcao que permite jogar o jogo picross, completo,
-        argumento: string com o nome do ficheiro
-        devolve: True quando o jogo estevir completo, False caso contrario'''
+    ''' jogo_picross: string-> logico
+        funcao que permite jogar o jogo, pedindo jogadas e aplicando ao tabuleiro
+        retorna: True se o Jogo estiver completo (bem preenchido)
+        retorna: False se o jogo estiver mal completo (mal preenchido)'''
+    
     print('JOGO PICROSS')
     especificacoes = le_tabuleiro(string)
     tabuleiro = cria_tabuleiro(especificacoes)
     escreve_tabuleiro(tabuleiro)
-    jogada_anterior = 0 
+    #jogada_anterior = 0 
     
 # enquanto o tabuleiro nao estiver completo jogamos
     while not (tabuleiro_completo(tabuleiro)):
-        try:
-            jogada = pede_jogada(tabuleiro)
-            
-            if not e_jogada(jogada):
-                    print('Jogada invalida.')
-# aplicar mudanca caso possivel                 
-            if not (jogadas_iguais(jogada, jogada_anterior)) and e_jogada(jogada):
-                    jogada_anterior=jogada 
-                    tabuleiro_preenche_celula(tabuleiro, jogada_coordenada(jogada),jogada_valor(jogada))
-            
-        except(ValueError):
-            print ('Jogada invalida.')
-
-        escreve_tabuleiro(tabuleiro)
-        if (tabuleiro_preenchido(tabuleiro)) and not (tabuleiro_completo(tabuleiro)):
+        if (tabuleiro_preenchido(tabuleiro)):
             print('JOGO: O tabuleiro nao esta correto!')
             return False
 
+        jogada = pede_jogada(tabuleiro)
+            
+        if not e_jogada(jogada):
+                print('Jogada invalida.')
+# aplicar mudanca caso possivel                 
+        if e_jogada(jogada):
+            #jogada_anterior=jogada 
+            tabuleiro_preenche_celula(tabuleiro, jogada_coordenada(jogada),jogada_valor(jogada))
+            escreve_tabuleiro(tabuleiro)
+
     print ('JOGO: Parabens, encontrou a solucao!')
     return True 
-#fim jogo_picross
+#fim jogo_picross<
 
 
 
@@ -527,8 +599,6 @@ print("5 : 5) --> 2*")'''
 #                                      Testes
 ########################################################################################
 
-#pepe sucks 
-# https://docs.python.org/2/library/stdtypes.html#string-formatting
 #escreve_tabuleiro(cria_tabuleiro((((2, ), (3, ), (2, ), (2, 2), (2, )), ((2, ), (1, 2), (2,3,4,5,6,7 ), (3, ), (3, )))))
 
 '''e=(((2,), (3,), (2,), (2, 2), (2,)), ((2,), (1, 2), (2,), (3,), (3,)))

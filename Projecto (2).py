@@ -6,7 +6,7 @@
 
 
 #==========  TAD coordenada =============#
-# a representacao de um coordenada e     #
+# a representacao de uma coordenada e    #
 # um tuplo de 2 elementos, (1) a posicao #
 # da linha e (2) a posicao da coluna     #
 #========================================#
@@ -96,7 +96,7 @@ def coordenada_para_cadeia(coordenada):
 
 
 #==================TAD tabuleiro ==================#
-# a repsentacao interna de um tabuleiro e uma      #
+# a representacao interna de um tabuleiro e uma    #
 # lista com 2 elementos:                           #
 # (1) o corpo do tabuleiro que e tambem uma lista  #
 # com listas dentro, em que cada lista corresponde #
@@ -114,8 +114,13 @@ def cria_tabuleiro(t):
     for nr_lin in range (len(t[0])):                  # para cada linha criamos uma lista de zeros
         tab.append([0 for nr_col in range(len(t[1]))]) #com o mesmo numero de colunas
 
+<<<<<<< HEAD
     return [tab,]+[t,]
 #fim cria_tabueleiro
+=======
+    return [tab,]+[tuplo,]
+#fim cria_tabuleiro
+>>>>>>> origin/master
 
 
 # - - Reconhecedor auxliiar ao construtor - - 
@@ -157,10 +162,16 @@ def tabuleiro_dimensoes(tabuleiro):
 
 
 def tabuleiro_especificacoes(tabuleiro):
+<<<<<<< HEAD
     ''' tabuleiro_especificacoes: tabuleiro -> tuplo
         retorna um tuplo com as especificacoes do tabuleiro'''
 
     if not(e_tabuleiro(tabuleiro)):
+=======
+    print("tabuleiro_especificacoes")
+    ''' recebe um tabuleiro e retornar as especificacoes deste'''
+    if not(e_tabuleiro(tabuleiro):
+>>>>>>> origin/master
         raise ValueError('tabuleiro_especificacoes: argumentos invalidos')
     
     return tabuleiro[1]
@@ -189,6 +200,7 @@ def tabuleiro_celula(tabuleiro,coordenada):
 #___________________Transformadores________________________
 
 def tabuleiro_preenche_celula(tabuleiro,coordenada,inteiro):
+<<<<<<< HEAD
     ''' tabuleiro_preenche_celula: tabuleiro x coordenada x [0,1,2] -> tabuleiro 
         preenche a celula na coordenada do tabuleiro com o valor inteiro
         e devolve o tabuleiro com a celula preenchida'''
@@ -199,6 +211,13 @@ def tabuleiro_preenche_celula(tabuleiro,coordenada,inteiro):
             and 0<= inteiro<= 2\
             and coordenada_linha(coordenada)<=tabuleiro_dimensoes(tabuleiro)[0]\
             and coordenada_coluna(coordenada)<= tabuleiro_dimensoes(tabuleiro)[0]):
+=======
+    '''recebe um tabuleiro, uma coordenada e um inteiro entre 0 e 2, modifica o tabuleiro
+    e preenche a celula da coordenada com o inteiro, retornando o tabuleiro modificado'''   
+    print("tabuleiro_preenche_celula")
+    if not (e_tabuleiro(tabuleiro) and e_coordenada(coordenada) and\
+            isinstance(inteiro,int) and 0<= inteiro<= 2 ):
+>>>>>>> origin/master
             raise ValueError('tabuleiro_preenche_celula: argumentos invalidos')
     linha= coordenada_linha(coordenada)
     coluna= coordenada_coluna(coordenada)
@@ -209,10 +228,15 @@ def tabuleiro_preenche_celula(tabuleiro,coordenada,inteiro):
 
 
 def escreve_tabuleiro(tabuleiro):
+<<<<<<< HEAD
     ''' escreve_tabuleiro: tabuleiro -> {}
         escreve a estrutura grafica do tabuleiro'''
 
     if not(e_tabuleiro(tabuleiro)):                #funcao so valida se recebermos um tabueleiro
+=======
+    print("escreve_tabuleiro")
+    if not(e_tabuleiro(tabuleiro)):                #funcao so valida se recebermos um tabuleiro
+>>>>>>> origin/master
         raise ValueError('escreve_tabuleiro: argumentos invalidos')
     
     especificacoes= tabuleiro_especificacoes(tabuleiro)
@@ -290,8 +314,28 @@ def tabuleiros_iguais(tabuleiro_1,tabuleiro_2):
         devolve, True se os 2 tabuleiros forem iguais, caso contrario, False'''
 
     if not (e_tabuleiro(tabuleiro_1) and e_tabuleiro(tabuleiro_2)):
+<<<<<<< HEAD
         return False 
     return tabuleiro_1 == tabuleiro_2
+=======
+        raise ValueError('cria_jogada: argumentos invalidos')
+    try:
+        espec_1=tabuleiro_especificacoes(tabuleiro_1)
+        espec_2=tabuleiro_especificacoes(tabuleiro_2)
+        nr_linhas=numero_linhas(tabuleiro_1)
+        nr_colunas=numero_colunas(tabuleiro_2)
+        for lin in range(nr_linhas):
+            for col in range (nr_colunas):
+                if not(\
+                    tabuleiro_celula(tabuleiro_1,cria_coordenada(lin+1,col+1))==\
+                    tabuleiro_celula(tabuleiro_2,cria_coordenada(lin+1,col+1)) and\
+                    espec_1[0][lin]==espec_2[0][lin]and\
+                    espec_1[1][col]==espec_2[1][col]\):
+                    return False
+    except(IndexError,TypeError):
+        return False  
+    return True
+>>>>>>> origin/master
 # fim tabuleiros_iguais #
 
 
@@ -341,6 +385,7 @@ def tabuleiro_preenchido(tabuleiro):
 
 
 
+<<<<<<< HEAD
 
 
 #================= TAD Jogada ========================
@@ -348,6 +393,13 @@ def tabuleiro_preenchido(tabuleiro):
 # um tuplo com 2 elementos:
 # (1) uma coordenada onde vamos aplicar a jogada
 # (2) um valor inteiro (0<valor<=2) que vamos aplicar
+=======
+#================= TAD Jogada =========================
+# a representacao interna de uma jogada e dada por    #
+# um tuplo com 2 elementos:                           #
+# (1) uma coordenada onde vamos aplicar a jogada      #
+# (2) um valor inteiro (0<valor<=2) que vamos aplicar #
+>>>>>>> origin/master
 #======================================================
 
 #____________________Construtor_________________________
@@ -360,8 +412,12 @@ def cria_jogada(coordenada, inteiro):
     if not (e_coordenada(coordenada) and isinstance(inteiro,int) and 0<inteiro<=2):
         raise ValueError('cria_jogada: argumentos invalidos')
     jogada = (coordenada,inteiro)
+<<<<<<< HEAD
     
     return jogada # para definir jogada temos de definir tabuleiro 
+=======
+    return jogada                       # para definir jogada temos de definir tabuleiro 
+>>>>>>> origin/master
 # fim cria_jogada #
 
 
@@ -414,10 +470,15 @@ def jogadas_iguais (jog1,jog2):
 
 #_______________________________Transformadores___________________________________
 
+<<<<<<< HEAD
 def jogada_para_cadeia(jogada):  #tem de retornar "coordenada --> valor" 
     ''' jogada_para_cadeia: jogada -> string
         devolve a representacao de um jogada em string'''
 
+=======
+def jogada_para_cadeia(jogada):             #tem de retornar "coordenada --> valor" 
+    print("jogada_para_cadeia")
+>>>>>>> origin/master
     coordenada = jogada_coordenada(jogada)
     valor = jogada_valor(jogada)
 
