@@ -333,26 +333,27 @@ def le_tabuleiro(string):
 def pede_jogada(tabuleiro):
     ''' tabuleiro -> jogada
     recebe o tabuleiro do jogo e devolva a jogada que o jogador quer executar'''
-    try:
-        string = input ('Introduza a jogada\n- coordenada entre (1 : 1) e '+\
+    string = input ('Introduza a jogada\n- coordenada entre (1 : 1) e '+\
                         coordenada_para_cadeia(tabuleiro_dimensoes(tabuleiro))+' >> ')
 
-        coordenadas = eval(string.replace(":",","))
-        coordenada = cria_coordenada(int(coordenadas[0]),int(coordenadas[1]))
-        valor = int(input ("valor >> "))
+    coordenadas = eval(string.replace(":",","))
+    coordenada = cria_coordenada(int(coordenadas[0]),int(coordenadas[1]))
+    valor = int(input ("- valor >> "))
         
-        if not (\
-                0<=valor<=2 and\
-                e_coordenada(coordenada) and\
-                coordenada[0]<= coordenada_linha(cria_coordenada(tabuleiro_dimensoes(tabuleiro))) and\
-                coordenada[1]<= coordenada_coluna(cria_coordenada(tabuleiro_dimensoes(tabuleiro)))\
-                ):
-            return False 
-    except (TypeError):
+    if not (\
+            0<=valor<=2 and\
+            e_coordenada(coordenada) and\
+            coordenada[0]<= coordenada_linha(tabuleiro_dimensoes(tabuleiro)) and\
+            coordenada[1]<= coordenada_coluna(tabuleiro_dimensoes(tabuleiro))\
+            ):
         return False 
     return cria_jogada(coordenada,valor)
 
-
+def jogo_picross (string):
+    '''funcao que permite jogar o jogo picross, completo,
+        argumento: string com o nome do ficheiro
+        devolve: True quando o jogo estevir completo, False caso contrario'''
+    
 
 '''T = cria_tabuleiro(le_tabuleiro("jogo_fig2.txt"))
 J = pede_jogada(T)
@@ -360,7 +361,7 @@ print("Introduza uma jogada*")
 print("coordenada entre (1 : 1) e (5 : 5)) >> (1 : 5)*")
 print("- valor >> 2*")
 print(jogada_para_cadeia(J))
-"(1 : 5) --> 2"
+print("(1 : 5) --> 2*")
 print(pede_jogada(T))
 print("Introduza uma jogada*")
 print("- coordenada entre (1 : 1) e (5 : 5)) >> (6 : 6)*")
@@ -370,8 +371,8 @@ J = pede_jogada(T)
 print("Introduza uma jogada*")
 print("coordenada entre (1 : 1) e (5 : 5)) >> (5 : 5)*")
 print("valor >> 2*")
-print(jogada_para_cadeia(J))'''
-
+print(jogada_para_cadeia(J))
+print("5 : 5) --> 2*")'''
 
 
 
