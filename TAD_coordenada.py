@@ -15,9 +15,11 @@ def coordenada_coluna(coordenada):
 
 def e_coordenada(coordenada):
 	if isinstance(coordenada, (tuple)):							# verificar se o que e dado e um tuplo
-		if not(isinstance(coordenada_linha(coordenada),(int)) and isinstance(coordenada_coluna(coordenada),(int))):	# verificar que os elementos do tuplo sao inteiros
+		if not(isinstance(coordenada_linha(coordenada),(int)) and\
+ isinstance(coordenada_coluna(coordenada),(int))):	# verificar que os elementos do tuplo sao inteiros
 			return False
-		if coordenada_linha(coordenada) <= 0 or coordenada_coluna(coordenada) <= 0:					# verificar que os elementos do tuplo sao positivos
+		if coordenada_linha(coordenada) <= 0 or\
+ coordenada_coluna(coordenada) <= 0:					# verificar que os elementos do tuplo sao positivos
 			return False
 		else:										# caso contrario, e coordenada
 			return True
