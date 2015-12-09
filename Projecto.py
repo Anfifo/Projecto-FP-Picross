@@ -42,8 +42,11 @@ def e_coordenada(coordenada):
 def coordenadas_iguais(coordenada1, coordenada2):
     if not (e_coordenada(coordenada1) and e_coordenada(coordenada2)):
         raise ValueError('coordenadas_iguais: argumentos invalidos') 
-    if not (coordenada1[0] == coordenada2[0] and coordenada1[1] == coordenada2[1]):       # comparar a posicao 1 das duas coordenadas, e fazer o mesmo para a segunda coordenada
-        return False
+    if not (\
+            coordenada_linha(coordenada1) == coordenada_linha(coordenada2) and\
+            coordenada_coluna(coordenada1) == coordenada_coluna(coordenada2)\
+            ):       # comparar a posicao 1 das duas coordenadas, e fazer o mesmo para a segunda coordenada
+            return False
     return True 
 
 def coordenada_para_cadeia(coordenada):
@@ -225,23 +228,23 @@ def escreve_tabuleiro(tabuleiro):
 def tabuleiro_completo(tabuleiro):
     if not(e_tabuleiro(tabuleiro)):
         raise ValueError('tabuleiro_completo: argumentos invalidos')
-    nr_lin_col=tabuleiro_dimensoes(tabuleiro)[0]
     especificacoes=tabuleiro_especificacoes(tabuleiro)
     E_lin=especificacoes[0]
     E_col=especificacoes[1]
-    tab=tabuleiro[0]
 
-    for i in range(nr_lin_col):
-        coluna=[tab[l][i] for l in range(nr_lin_col)]
-        linha=tab[i]
-        if not (\
+    if not (tabuleiro_preenchido):
+        return False 
+
+    for i in range (coordenada_linha(tabuleiro_dimensoes(tabuleiro))):
+        coluna = [tabuleiro_celula(tabuleiro,cria_coordenada((l+1),(i+1))) for l in range (coordenada_linha(tabuleiro_dimensoes(tabuleiro)))]
+        linha = [tabuleiro_celula(tabuleiro,cria_coordenada((i+1),(c+1))) for c in range (coordenada_linha(tabuleiro_dimensoes(tabuleiro)))]
+        if not(\
                 sum(E_lin[i]) == linha.count(2) and\
                 len(E_lin[i])-1 <= linha.count(1) and\
                 sum(E_col[i]) == coluna.count(2) and\
-                len(E_col[i])-1 <= coluna.count(1)and\
-                linha.count(0) == 0 and coluna.count(0) == 0\
+                len(E_col[i])-1 <= coluna.count(1)\
                 ):
-                    return False 
+                return False
     return True 
 
 
@@ -302,7 +305,7 @@ def e_jogada (universal):
 
 def jogadas_iguais (jog1,jog2):
     if not (e_jogada(jog1) and e_jogada(jog2)):
-        raise ValueError('jogadas_iguais: argumentos invalidos')
+        return False 
     if not (\
             jogada_coordenada(jog1)==jogada_coordenada(jog2)and\
             jogada_valor(jog1)==jogada_valor(jog2)
@@ -341,7 +344,6 @@ def pede_jogada(tabuleiro):
     valor = int(input ("- valor >> "))
         
     if not (\
-            0<=valor<=2 and\
             e_coordenada(coordenada) and\
             coordenada[0]<= coordenada_linha(tabuleiro_dimensoes(tabuleiro)) and\
             coordenada[1]<= coordenada_coluna(tabuleiro_dimensoes(tabuleiro))\
@@ -353,7 +355,51 @@ def jogo_picross (string):
     '''funcao que permite jogar o jogo picross, completo,
         argumento: string com o nome do ficheiro
         devolve: True quando o jogo estevir completo, False caso contrario'''
-    
+    print('JOGO PICROSS')
+    especificacoes = le_tabuleiro(string)
+    tabuleiro = cria_tabuleiro(especificacoes)
+    jogada_anterior = 0 
+    while not (tabuleiro_completo(tabuleiro)):
+        #try:
+        jogada = pede_jogada(tabuleiro)
+            
+        if not e_jogada(jogada):
+                print('Jogada invalida')
+
+        if not (jogadas_iguais(jogada, jogada_anterior)):
+                jogada_anterior=jogada 
+                tabuleiro_preenche_celula(\
+                                            tabuleiro,\
+                                            jogada_coordenada(jogada),\
+                                            jogada_valor(jogada))
+            
+        #except(TypeError,NameError,ValueError,IndexError):
+        #    print ('Jogada invalida')
+
+        escreve_tabuleiro(tabuleiro)
+
+        if (tabuleiro_preenchido) and not (tabuleiro_completo):
+            print('JOGO: O tabuleiro nao esta correto!')
+            return False
+
+    print ('JOGO: Parabens, encontrou a solucao!')
+    return True 
+
+def tabuleiro_preenchido(tabuleiro):
+    ''' tabuleiro -> boleano
+        recebe um tabuleiro e retorna True apenas se este nao tiver 
+        nenhuma celula a zero, ou seja se estiver preenchido'''
+    for i in range (coordenada_linha(tabuleiro_dimensoes(tabuleiro))):
+        for j in range (coordenada_coluna(tabuleiro_dimensoes(tabuleiro))):
+            if tabuleiro_celula(tabuleiro,cria_coordenada(i+1,j+1))==0:
+                return False
+    return True
+
+
+
+#jogo_picross("jogo5x5.txt")
+
+
 
 '''T = cria_tabuleiro(le_tabuleiro("jogo_fig2.txt"))
 J = pede_jogada(T)
@@ -376,7 +422,6 @@ print("5 : 5) --> 2*")'''
 
 
 
-
 #------------------------------------------------------------------------
 ########################################################################################
 #                                      Testes
@@ -385,8 +430,8 @@ print("5 : 5) --> 2*")'''
 #pepe sucks 
 # https://docs.python.org/2/library/stdtypes.html#string-formatting
 #escreve_tabuleiro(cria_tabuleiro((((2, ), (3, ), (2, ), (2, 2), (2, )), ((2, ), (1, 2), (2,3,4,5,6,7 ), (3, ), (3, )))))
-'''
-e=(((2,), (3,), (2,), (2, 2), (2,)), ((2,), (1, 2), (2,), (3,), (3,)))
+
+'''e=(((2,), (3,), (2,), (2, 2), (2,)), ((2,), (1, 2), (2,), (3,), (3,)))
 t = cria_tabuleiro(e)
 tabuleiro_dimensoes(t)
 print("(5, 5)")
