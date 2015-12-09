@@ -18,12 +18,12 @@ def cria_coordenada(l,c):
 def coordenada_linha(coordenada):                       # o primeiro valor do tuplo da a coordenada da linha
     if not e_coordenada(coordenada):
         raise ValueError("coordenada_linha: argumentos invalidos")
-    return coordenada[0]
+    return int(coordenada[0])
     
 def coordenada_coluna(coordenada):
     if not e_coordenada(coordenada):
         raise ValueError("coordenada_coluna: argumentos invalidos")
-    return coordenada[1]                            # o segundo valor do tuplo da a coordenada da coluna 
+    return int(coordenada[1])                            # o segundo valor do tuplo da a coordenada da coluna 
 
 def e_coordenada(coordenada):
     try:
@@ -104,15 +104,31 @@ def tabuleiro_celula(tabuleiro,coordenada):
     e 2 se estiver preenchido'''
     if not(e_tabuleiro(tabuleiro) and e_coordenada(coordenada)):
         raise ValueError('tabuleiro_celula: argumentos invalidos') 
-    return tabuleiro[0][coordenada[0]-1][coordenada[1]-1] # primeiro ve a linha e depois coluna
+    try:    
+        linha = coordenada_linha(coordenada)-1
+        coluna = coordenada_coluna(coordenada)-1
+        celula = tabuleiro[0][linha][coluna]
+    except(TypeError,NameError,ValueError,IndexError):
+        raise ValueError('tabuleiro_celula: argumentos invalidos')   
+    return celula # primeiro ve a linha e depois coluna
 
 
 def tabuleiro_preenche_celula(tabuleiro,coordenada,inteiro):
     '''recebe um tabuleiro, uma coordenada e um inteiro entre 0 2, modifica o tabuleiro
     e preenche a celula da coordenada com o inteiro, retornando o tabuleiro modificado'''   
-    if not(e_tabuleiro(tabuleiro) and e_coordenada(coordenada) and isinstance(inteiro,int)):
+    if not (\
+            e_tabuleiro(tabuleiro) and\
+            e_coordenada(coordenada) and\
+            isinstance(inteiro,int) and\
+            0<= inteiro<= 2 ):
+                raise ValueError('tabuleiro_preenche_celula: argumentos invalidos')
+    try:
+        linha= coordenada_linha(coordenada)
+        coluna= coordenada_coluna(coordenada)
+        tabuleiro[0][linha-1][coluna-1] = inteiro
+
+    except(TypeError,NameError,ValueError,IndexError):
         raise ValueError('tabuleiro_preenche_celula: argumentos invalidos')
-    tabuleiro[0][coordenada[0]-1][coordenada[1]-1]=inteiro
     return tabuleiro
 
 
@@ -122,7 +138,7 @@ def e_tabuleiro(universal):
         tab=universal[0]
         especificacoes= universal[1]
         nr_linhas= len(tab) 
-        
+# verifica tab 
         for i in range(len(tab)):      
             nr_colunas = len(tab[i]) #o nr de linhas tem de ser = ao nr colunas
             for j in range(len(tab[i])):
@@ -179,13 +195,14 @@ def escreve_tabuleiro(tabuleiro):
     valores=('?',".","x")
     tab=tabuleiro[0]
 
-    for i in range(max(dim_Ecol)):          # print especificacoes das colunas
+#===========print especificacoes colunas ==============
+    for i in range(max(dim_Ecol)):         
         for colunas in range(nr_lin_col):
             if dim_Ecol[colunas]>=max(dim_Ecol)-(i):
                 print(' ',E_col[colunas][dim_Ecol[colunas]-max(dim_Ecol)+(i)],end='  ')
             else:
                 print('   ',end='  ')   
-        print(' ')
+        print('  ')
 #===========print cada elemento========================
     for l in range (nr_lin_col): 
         for coluna in range(nr_lin_col):
@@ -221,14 +238,15 @@ def tabuleiro_completo(tabuleiro):
                 sum(E_lin[i]) == linha.count(2) and\
                 len(E_lin[i])-1 <= linha.count(1) and\
                 sum(E_col[i]) == coluna.count(2) and\
-                len(E_col[i])-1 <= coluna.count(1)\
+                len(E_col[i])-1 <= coluna.count(1)and\
+                linha.count(0) == 0 and coluna.count(0) == 0\
                 ):
                     return False 
     return True 
 
 
 ########################################################################################
-#                                      Aux_TAD_tabuleiro
+#                          Aux_TAD_tabuleiro
 ########################################################################################
 
 
@@ -242,7 +260,7 @@ def e_especificacao(t):
                     if not(isinstance(t, tuple)) or\
                         not(isinstance(t[i], tuple)) or\
                         not(isinstance(t[i][j], tuple)) or\
-                        not((isinstance(t[i][j][k], int)) and t[i][j][k]>0):
+                        not((isinstance(t[i][j][k], int)) and t[i][j][k]>=0):
                         return False
     except(TypeError,IndexError):
         return False 
@@ -305,17 +323,54 @@ def jogada_para_cadeia(jogada):  #tem de retornar "coordenada --> valor"
 ########################################################################################
 
 
+def le_tabuleiro(string):
+    ''' recebe uma string que é um nome de um ficheiro com os dados da 
+    especificacao e devolve o tuplo das especificacoes'''
+    ficheiro=open(string,"r")
+    especificacoes = eval (ficheiro.readline())
+    return especificacoes
+
+def pede_jogada(tabuleiro):
+    ''' tabuleiro -> jogada
+    recebe o tabuleiro do jogo e devolva a jogada que o jogador quer executar'''
+    try:
+        string = input ('Introduza a jogada\n- coordenada entre (1 : 1) e '+\
+                        coordenada_para_cadeia(tabuleiro_dimensoes(tabuleiro))+' >> ')
+
+        coordenadas = eval(string.replace(":",","))
+        coordenada = cria_coordenada(int(coordenadas[0]),int(coordenadas[1]))
+        valor = int(input ("valor >> "))
+        
+        if not (\
+                0<=valor<=2 and\
+                e_coordenada(coordenada) and\
+                coordenada[0]<= coordenada_linha(cria_coordenada(tabuleiro_dimensoes(tabuleiro))) and\
+                coordenada[1]<= coordenada_coluna(cria_coordenada(tabuleiro_dimensoes(tabuleiro)))\
+                ):
+            return False 
+    except (TypeError):
+        return False 
+    return cria_jogada(coordenada,valor)
 
 
 
-
-
-
-
-
-
-
-
+'''T = cria_tabuleiro(le_tabuleiro("jogo_fig2.txt"))
+J = pede_jogada(T)
+print("Introduza uma jogada*")
+print("coordenada entre (1 : 1) e (5 : 5)) >> (1 : 5)*")
+print("- valor >> 2*")
+print(jogada_para_cadeia(J))
+"(1 : 5) --> 2"
+print(pede_jogada(T))
+print("Introduza uma jogada*")
+print("- coordenada entre (1 : 1) e (5 : 5)) >> (6 : 6)*")
+print("- valor >> 2*")
+print("False")
+J = pede_jogada(T)
+print("Introduza uma jogada*")
+print("coordenada entre (1 : 1) e (5 : 5)) >> (5 : 5)*")
+print("valor >> 2*")
+print(jogada_para_cadeia(J))'''
 
 
 
@@ -329,7 +384,8 @@ def jogada_para_cadeia(jogada):  #tem de retornar "coordenada --> valor"
 #pepe sucks 
 # https://docs.python.org/2/library/stdtypes.html#string-formatting
 #escreve_tabuleiro(cria_tabuleiro((((2, ), (3, ), (2, ), (2, 2), (2, )), ((2, ), (1, 2), (2,3,4,5,6,7 ), (3, ), (3, )))))
-'''e=(((2,), (3,), (2,), (2, 2), (2,)), ((2,), (1, 2), (2,), (3,), (3,)))
+'''
+e=(((2,), (3,), (2,), (2, 2), (2,)), ((2,), (1, 2), (2,), (3,), (3,)))
 t = cria_tabuleiro(e)
 tabuleiro_dimensoes(t)
 print("(5, 5)")
@@ -384,8 +440,7 @@ t2 = tabuleiro_preenche_celula(t, cria_coordenada(5, 5), 1)
 escreve_tabuleiro(t)
 print(tabuleiro_completo(t))
 print("true")
-escreve_tabuleiro(cria_tabuleiro((((1,),(3,),(1,)),((3,),(1,),(1,)))))
-'''
+escreve_tabuleiro(cria_tabuleiro((((1,),(3,),(1,)),((3,),(1,),(1,)))))'''
 
 
 #J = cria_jogada(cria_coordenada(1, 1), 2)
